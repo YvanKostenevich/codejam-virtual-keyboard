@@ -1,0 +1,55 @@
+body {
+    display: flex;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+}
+
+textarea {
+    width: 600px;
+    height: 300px;
+    margin: 50px auto;
+}
+
+.keyboard {
+    width: 700px;
+    height: 400px;
+    margin: 0 auto;
+    background: #004134;;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.keyboard__key {
+    width: 35px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    margin: 5px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.keyboard__wide {
+    width: 80px;
+}
+
+.keyboard__ultrawide {
+    width: 150px;
+}
+
+br {
+    width: 100%;
+    content: '';
+}
+.uppercase{
+    text-transform: capitalize;
+}
+.lowercase{
+    text-transform: revert;
+}
+
+.animation{
+    background-color: ;
+}
