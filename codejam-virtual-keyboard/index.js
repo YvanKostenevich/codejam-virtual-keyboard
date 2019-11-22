@@ -18,13 +18,47 @@ const lastKeysInRow = ['Backspace', 'p', 'Enter', '?', 'ъ'];
 
 const keyboardNameKey = 'current-keyboard-name';
 
-let savedKeyboardName =  localStorage.getItem(keyboardNameKey);
+const savedKeyboardName = localStorage.getItem(keyboardNameKey);
 
 
 let capsLock = false;
 
 let currentKeyboard = savedKeyboardName === 'RU' ? keyLayoutRu : keyLayoutEng;
 
+
+const textarea = document.createElement('textarea');
+textarea.setAttribute('id', 'textarea');
+document.body.appendChild(textarea);
+createKeyboard(currentKeyboard);
+
+
+function triggerAnimation(el) {
+	const animation1 = setInterval(changeColor, 30);
+	let color = 0.2;
+	function changeColor() {
+		el.style.backgroundColor = `rgba(255,255,255,${color + 0.1})`;
+		color += 0.1;
+		if (color >= 0.9) {
+			clearInterval(animation1);
+			const animation2 = setInterval(revertColor, 30);
+			function revertColor() {
+				el.style.backgroundColor = `rgba(255,255,255,${color - 0.1})`;
+				color -= 0.1;
+				if (color <= 0.3) {
+					clearInterval(animation2);
+				}
+			}
+		}
+	}
+}
+
+function createKeyboard(array) {
+	const keyboard = document.createElement('div');
+	keyboard.classList.add('keyboard');
+	document.querySelector('body')
+		.appendChild(keyboard);
+	array.forEach(createKeyboardButton);
+}
 
 function createKeyboardButton(el) {
 	// create button
@@ -84,27 +118,8 @@ function createKeyboardButton(el) {
 	}
 }
 
-function triggerAnimation(el) {
-	const animation1 = setInterval(changeColor, 30);
-	let color = 0.2;
-	function changeColor() {
-		el.style.backgroundColor = `rgba(255,255,255,${color + 0.1})`;
-		color += 0.1;
-		if (color >= 0.9) {
-			clearInterval(animation1);
-			const animation2 = setInterval(revertColor, 30);
-			function revertColor() {
-				el.style.backgroundColor = `rgba(255,255,255,${color - 0.1})`;
-				color -= 0.1;
-				if (color <= 0.3) {
-					clearInterval(animation2);
-				}
-			}
-		}
-	}
-}
 
-const simulateClick = function (elem) {
+function simulateClick(elem) {
 	// Create our event (with options)
 	const evt = new MouseEvent('click', {
 		bubbles: true,
@@ -113,7 +128,7 @@ const simulateClick = function (elem) {
 	});
 		// If cancelled, don't dispatch our event
 	const canceled = !elem.dispatchEvent(evt);
-};
+}
 
 const input = document.getElementById('textarea');
 input.addEventListener('keydown', (e) => {
@@ -123,7 +138,7 @@ input.addEventListener('keydown', (e) => {
 			localStorage.setItem(keyboardNameKey, 'RU');
 		} else {
 			currentKeyboard = keyLayoutEng;
-				localStorage.setItem(keyboardNameKey, 'EN');
+			localStorage.setItem(keyboardNameKey, 'EN');
 		}
 		document.querySelector('body')
 			.removeChild(document.querySelector('.keyboard'));
@@ -133,7 +148,7 @@ input.addEventListener('keydown', (e) => {
 	// animate buttons on keypress
 	const buttons = document.querySelectorAll('.keyboard__key');
 
-	for (let i = 0; i < buttons.length; i++) {
+	for (let i = 0; i < buttons.length; i += 1) {
 		if (buttons[i].innerHTML.toLowerCase() === e.key.toLowerCase()) {
 			triggerAnimation(buttons[i]);
 
@@ -143,13 +158,3 @@ input.addEventListener('keydown', (e) => {
 		}
 	}
 });
-
-function createKeyboard(array) {
-	const keyboard = document.createElement('div');
-	keyboard.classList.add('keyboard');
-	document.querySelector('body')
-		.appendChild(keyboard);
-	array.forEach(createKeyboardButton);
-}
-
-const myKeyboard = createKeyboard(currentKeyboard);
